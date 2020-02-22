@@ -11,16 +11,20 @@ import UserContext from '../../Contexts/UserContext';
 import { ApolloConsumer } from 'react-apollo';
 import { gql } from 'apollo-boost';
 import DemoCard from '../DemoCard/index';
+import { encryption } from '../../encryption';
+import { decryption } from '../../decryption';
 
 const SignIn = () => {
   const [email, setEmail] = useState("dsc@siesgst.ac.in");
-  const [password, setPassword] = useState("vijaya@26");
+  const [password, setPassword] = useState("viajay@26");
+  const [encryptedEmail, setEncryptedEmail] = useState("");
+  const [encryptedPassword, setEncryptedPassword] = useState("");
   const { setUser, user } = useContext(UserContext);
   const history = useHistory();
   
   const query = gql`
-  query Login($email: String!, $password: String!) {
-    login(email:$email, password:$password){
+  query Login($encryptedEmail: String!, $encryptedPassword: String!) {
+    login(email:$encryptedEmail, password:$encryptedPassword){
       userId
       token
       code
@@ -54,10 +58,13 @@ const SignIn = () => {
   // setUser(data);
   const handleSignIn = async (client) => {
     // setUser(true);
+
     const { data } = await client.query({
       query: query,
-      variables: { email, password }
+      variables: { encryptedEmail, encryptedPassword}
     });
+    console.log(decryption(encryptedEmail), "decrypted email");
+
     setUser(data);
     // this.onDogFetched(data.dog);
     // getLoginDetails({ variables: {
@@ -72,6 +79,23 @@ const SignIn = () => {
     // console.log(test);
     // console.log(data);
   // };
+  // console.log(encryptedEmail);
+  const onEmailChange = (e) => {
+    const value = e.target.value;
+    encryption(value).then((response) => {
+      setEncryptedEmail(response);
+    });
+    setEmail(value);
+  }
+
+  const onPasswordChange = (e) => {
+    const value = e.target.value;
+    encryption(value).then((response) => {
+      setEncryptedPassword(response);
+    });
+    // setEncryptedPassword(encryption(value));
+    setPassword(value);
+  }
 
   return (
     <ApolloConsumer>
@@ -96,7 +120,7 @@ const SignIn = () => {
                 <Input
                   id="1"
                   value={email}
-                  onChange={e => setEmail(e.currentTarget.value)}
+                  onChange={e => onEmailChange(e)}
                 />
               </TextField>
               <TextField
@@ -108,7 +132,7 @@ const SignIn = () => {
                   id="2"
                   type="password"
                   value={password}
-                  onChange={e => setPassword(e.currentTarget.value)}
+                  onChange={e => onPasswordChange(e)}
                 />
               </TextField>
               {/* When Forgot Password is clicked, we are redirected to forgot route */}
@@ -126,12 +150,18 @@ const SignIn = () => {
         </Row>
         <Row>
           <Cell>
-            <DemoCard data={user} />
+            { email || password ?
+              <DemoCard data={{email, password}} />
+              : null
+            } 
           </Cell>
         </Row>
         <Row>
           <Cell>
-            <DemoCard data={{email, password}} />
+          { email || password ?
+            <DemoCard data={{encryptedEmail, encryptedPassword}} />
+            : null
+          } 
           </Cell>
         </Row>
       </Grid>

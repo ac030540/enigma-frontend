@@ -2,6 +2,7 @@ import React from 'react';
 import { Headline4 } from '@material/react-typography';
 import BlogCard from './BlogCard';
 import { gql } from 'apollo-boost';
+import encryption from '../../encryption';
 // import blogs from './blogs';
 import { Query } from "react-apollo";
 
