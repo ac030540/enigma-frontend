@@ -1,5 +1,5 @@
 import React from 'react';
-import { Body1, Body2, Headline5 } from '@material/react-typography';
+import { Body1, Headline5 } from '@material/react-typography';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import './BlogCard.scss';
