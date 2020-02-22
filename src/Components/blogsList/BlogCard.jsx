@@ -6,7 +6,7 @@ import './BlogCard.scss';
 import { Grid, Cell, Row } from '@material/react-layout-grid';
 
 const BlogCard = ({
-  tags, id, date, name, timeToRead, author, updated,
+  tags, id, date, name, timeToRead, author, updated, content,
 }) => {
   const tagsArray = tags.map(tag => (
     <span className="ba dib br4 f6 black-60 mr2 mb1" style={{ padding: '3px' }}>
@@ -33,15 +33,15 @@ const BlogCard = ({
       </div>
       <Grid className="" style={{ padding: 0, margin: '0px 20px 0px 20px' }}>
         <Row>
-          <Cell className="ma0 pa0" desktopColumns={6} tabletColumns={4} phoneColumns={2}>
+          <Cell className="ma0 pa0" desktopColumns={12} tabletColumns={8} phoneColumns={4}>
             <Body1 className="black mb1">
-              {author}
+              Posted by: {author}
             </Body1>
             <Body1 className="">
               {tagsArray}
             </Body1>
           </Cell>
-          <Cell className="ma0 pa0" desktopColumns={6} tabletColumns={4} phoneColumns={2}>
+          {/* <Cell className="ma0 pa0" desktopColumns={6} tabletColumns={4} phoneColumns={2}>
             <Body2 className="gray text-alignment">
               Posted on:
               &nbsp;
@@ -51,6 +51,13 @@ const BlogCard = ({
               <br />
               {timeToRead}
             </Body2>
+          </Cell> */}
+        </Row>
+        <Row>
+          <Cell columns={12}>
+            <div className="ma2">
+            {content}
+            </div>
           </Cell>
         </Row>
       </Grid>
