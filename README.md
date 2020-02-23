@@ -1,8 +1,5 @@
 # Enigma
 
-## Link for frontend repo
-[Repository Link](https://github.com/ac030540/enigma-frontend)
-
 ## About the project
 
 It’s no secret that “Data is the new oil”. We all visit hundreds of websites daily and we share and create huge amounts of data every single day on those websites. Many of those websites aren’t secure in terms of user privacy and data protection. Several organizations use insecure connections to transfer data over their intranet, which is a major vulnerability. 
