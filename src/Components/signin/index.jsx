@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Grid, Row, Cell } from '@material/react-layout-grid';
 import TextField, { Input } from '@material/react-text-field';
@@ -16,11 +16,25 @@ import { decryption } from '../../decryption';
 
 const SignIn = () => {
   const [email, setEmail] = useState("dsc@siesgst.ac.in");
-  const [password, setPassword] = useState("viajay@26");
+  const [password, setPassword] = useState("vijaya@26");
   const [encryptedEmail, setEncryptedEmail] = useState("");
   const [encryptedPassword, setEncryptedPassword] = useState("");
   const { setUser, user } = useContext(UserContext);
+  const dataRef = useRef({});
   const history = useHistory();
+  const [serverResponse, setServerResponse] = useState({});
+  const [serverDecryptedResponse, setServerDecryptedResponse] = useState({});
+
+  useEffect(() => {
+    encryption(email).then((response) => {
+      setEncryptedEmail(response);
+    });
+    encryption(password).then((response) => {
+      setEncryptedPassword(response);
+    })
+    setServerResponse({});
+    setServerDecryptedResponse({});
+  }, [email, password]);
   
   const query = gql`
   query Login($encryptedEmail: String!, $encryptedPassword: String!) {
@@ -28,7 +42,6 @@ const SignIn = () => {
       userId
       token
       code
-      success
       message
     }
   }
@@ -56,6 +69,29 @@ const SignIn = () => {
   // }
   // setUser(data);
   // setUser(data);
+  // const updateDetails = (data) => {
+  //   setServerDecryptedResponse(() => decryptAndUpdateResponse(data));
+  // }
+  const decryptAndUpdateResponse = (data) => {
+    const dataCopy = JSON.parse(JSON.stringify(data));
+    const entries = Object.entries(dataCopy.login);
+    // setServerDecryptedResponse(() => {
+    // })
+    console.log(entries, "decrpytandupdate");
+    // console.log(data.login, "data-login");
+    // setServerResponse(data.login);
+    entries.forEach(async (element) => {
+      // console.log();
+      // console.log(element);
+      if(element[1]!=null) {
+        const result = await decryption(element[1]);
+        dataCopy.login[element[0]] = result;
+      }
+      // console.log(result);
+    });
+    // console.log(data, "decrpytandupdate");
+    return {...dataCopy};
+  }
   const handleSignIn = async (client) => {
     // setUser(true);
 
@@ -63,9 +99,24 @@ const SignIn = () => {
       query: query,
       variables: { encryptedEmail, encryptedPassword}
     });
-    console.log(decryption(encryptedEmail), "decrypted email");
-
+    // console.log({...data, data});
+    // dataRef.current = data;
+    // console.log(dataRef.current, "dataref");
+    // console.log(data);
+    // const recieved = await {...data};
+    // console.log(error);
+    // console.log(decryption(encryptedEmail), "decrypted email");
+    // const updatedDetails1 = decryptAndUpdateResponse(data);
+    setServerResponse(data);
     setUser(data);
+    const updatedDetails = await decryptAndUpdateResponse(data);
+    setServerDecryptedResponse(updatedDetails);
+
+    // setServerDecryptedResponse(await decryptAndUpdateResponse(data));
+
+
+    // decryption(data).then((result) => {console.log(result, "decrypted")})
+    // console.log(data);
     // this.onDogFetched(data.dog);
     // getLoginDetails({ variables: {
     //   email,
@@ -82,17 +133,17 @@ const SignIn = () => {
   // console.log(encryptedEmail);
   const onEmailChange = (e) => {
     const value = e.target.value;
-    encryption(value).then((response) => {
-      setEncryptedEmail(response);
-    });
+    // encryption(value).then((response) => {
+    //   setEncryptedEmail(response);
+    // });
     setEmail(value);
   }
 
   const onPasswordChange = (e) => {
     const value = e.target.value;
-    encryption(value).then((response) => {
-      setEncryptedPassword(response);
-    });
+    // encryption(value).then((response) => {
+    //   setEncryptedPassword(response);
+    // });
     // setEncryptedPassword(encryption(value));
     setPassword(value);
   }
@@ -151,7 +202,7 @@ const SignIn = () => {
         <Row>
           <Cell>
             { email || password ?
-              <DemoCard data={{email, password}} />
+              <DemoCard data={{email, password}} title="User entered data" />
               : null
             } 
           </Cell>
@@ -159,7 +210,23 @@ const SignIn = () => {
         <Row>
           <Cell>
           { email || password ?
-            <DemoCard data={{encryptedEmail, encryptedPassword}} />
+            <DemoCard data={{encryptedEmail, encryptedPassword}} title="User's encrypted entered data" />
+            : null
+          } 
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+          { serverResponse ?
+            <DemoCard data={serverResponse} title="User's server response" />
+            : null
+          } 
+          </Cell>
+        </Row>
+        <Row>
+          <Cell>
+          { serverDecryptedResponse ?
+            <DemoCard data={serverDecryptedResponse} title="User's server response decrypted" />
             : null
           } 
           </Cell>
