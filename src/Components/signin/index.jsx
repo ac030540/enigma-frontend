@@ -20,7 +20,7 @@ const SignIn = () => {
   const [encryptedEmail, setEncryptedEmail] = useState("");
   const [encryptedPassword, setEncryptedPassword] = useState("");
   const { setUser, user } = useContext(UserContext);
-  const dataRef = useRef({});
+  // const dataRef = useRef({});
   const history = useHistory();
   const [serverResponse, setServerResponse] = useState({});
   const [serverDecryptedResponse, setServerDecryptedResponse] = useState({});
@@ -77,7 +77,7 @@ const SignIn = () => {
     const entries = Object.entries(dataCopy.login);
     // setServerDecryptedResponse(() => {
     // })
-    console.log(entries, "decrpytandupdate");
+    // console.log(entries, "decrpytandupdate");
     // console.log(data.login, "data-login");
     // setServerResponse(data.login);
     entries.forEach(async (element) => {
