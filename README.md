@@ -14,16 +14,16 @@ Our project has the following structure:
     * Components
     * Contexts
 
-  ### 1. Public
+  #### 1. Public
   It contains the index.html file and other metadata for the single page react app.
 
-  ### 2. src
+  #### 2. src
   The entire source code for the UI is present in this folder.
 
-  ### 3. Components
+  #### 3. Components
   This contains all the files for the resuable UI components.
 
-  ### 4. Contexts
+  #### 4. Contexts
   This contains all the contexts which are needed for maintaining the states of the app at higher level components.
 
 ## Getting Started
