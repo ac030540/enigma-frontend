@@ -20,10 +20,10 @@ Our project has the following structure:
   ### 2. src
   The entire source code for the UI is present in this folder.
 
-  ### 4. Components
+  ### 3. Components
   This contains all the files for the resuable UI components.
 
-  ### 5. Contexts
+  ### 4. Contexts
   This contains all the contexts which are needed for maintaining the states of the app at higher level components.
 
 ## Getting Started
